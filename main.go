@@ -18,10 +18,14 @@ func init() {
 func main() {
 	fmt.Println("Server stated running successfully")
 	r := gin.Default()
+
+	//authentication
 	r.POST("/api/auth/register", controllers.Register)
 	r.POST("/api/auth/login", controllers.Login)
 	r.GET("/api/auth/validate", middleware.AuthMiddleware, controllers.ValidateAuth)
 	r.POST("/api/auth/resetpassword", controllers.ResetPassword)
+
+	//blogs
 	r.POST("/api/blogs", middleware.AuthMiddleware, controllers.CreateBlog)
 	r.GET("/api/blogs", controllers.GetBlogs)
 	r.GET("/api/blogs/search", controllers.SearchBlogs)
@@ -29,6 +33,9 @@ func main() {
 	r.GET("/api/blogs/user/:id", middleware.AuthMiddleware, controllers.GetUserBlogs)
 	r.PUT("/api/blogs/:id", middleware.AuthMiddleware, controllers.UpdateBlog)
 	r.DELETE("/api/blogs/:id", middleware.AuthMiddleware, controllers.DeleteBlog)
+
+	//users
+	r.GET("/api/users", middleware.AuthMiddleware, controllers.GetAllUsers)
 
 	r.Run() // listen and serve on localhost:3000
 }
